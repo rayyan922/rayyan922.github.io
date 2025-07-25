@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rayyan</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f8f9fa, #e9ecef);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 700px;
+      height: 90vh;
+      background: #fff;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: #6c63ff;
+      color: white;
+      padding: 1rem;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      background: #f1f3f5;
+    }
+
+    .message {
+      margin-bottom: 1rem;
+      max-width: 70%;
+      padding: 0.75rem 1rem;
+      border-radius: 15px;
+      position: relative;
+      word-wrap: break-word;
+    }
+
+    .message.you {
+      background-color: #6c63ff;
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 0;
+    }
+
+    .message.other {
+      background-color: #dee2e6;
+      color: #212529;
+      border-bottom-left-radius: 0;
+    }
+
+    .chat-input {
+      display: flex;
+      padding: 1rem;
+      background: #fff;
+      border-top: 1px solid #ccc;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 0.75rem;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      margin-right: 0.5rem;
+      outline: none;
+    }
+
+    .chat-input button {
+      padding: 0.75rem 1rem;
+      border: none;
+      background-color: #6c63ff;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .chat-input button:hover {
+      background-color: #574fd6;
+    }
+     .back{
+       
+        width: 300px;
+        height: 50px;
+        font-size: large;
+        background-color: rgb(124, 6, 242);
+
+       }
+     
+
+    @media (max-width: 600px) {
+      .chat-container {
+        height: 100vh;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="chat-container">
+  <div class="chat-header">leave chat <button class="back"><a href="ryn.html">back</a></button></div>
+  <div class="chat-messages" id="chat-box">
+    <div class="message other">Hi there! 👋</div>
+    <div class="message you">Hey! How's it going?</div>
+  </div>
+  <div class="chat-input">
+    <input type="text" id="messageInput" placeholder="Type a message..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<script>
+  function sendMessage() {
+    const input = document.getElementById('messageInput');
+    const chatBox = document.getElementById('chat-box');
+    const message = input.value.trim();
+
+    if (message === '') return;
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'message you';
+    msgDiv.textContent = message;
+
+    chatBox.appendChild(msgDiv);
+    input.value = '';
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+</script>
+
+</body>
+</html>
