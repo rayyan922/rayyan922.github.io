@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+           
+           
+            background-image: url(data:image/png;base64,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);
+        }
+          .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            background-color: rgb(125, 125, 230);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+        }
+        
+        
+        .calculator {
+            width: 250px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .display {
+            background: #222;
+            color: white;
+            text-align: right;
+            padding: 20px;
+            font-size: 24px;
+            height: 60px;
+        }
+        
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: #ddd;
+        }
+        
+        button {
+            border: none;
+            padding: 20px;
+            font-size: 18px;
+            cursor: pointer;
+            background: white;
+        }
+        
+        button:hover {
+            background: #eee;
+        }
+        
+        button:active {
+            background: #ddd;
+        }
+        
+        .operator {
+            background: #f0f0f0;
+        }
+        
+        .equals {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .clear {
+            background: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="buttons">
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button onclick="appendToDisplay('/')">/</button>
+            <button onclick="appendToDisplay('*')">*</button>
+            <button onclick="backspace()">⌫</button>
+            
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button onclick="appendToDisplay('-')">-</button>
+            
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button onclick="appendToDisplay('+')">+</button>
+            
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button class="equals" onclick="calculate()">=</button>
+            
+            <button onclick="appendToDisplay('0')">0</button>
+            <button onclick="appendToDisplay('.')">.</button>
+            <button colspan="2"></button>
+        </div>
+    </div>
+    <BUtton class="btn">
+        <a href="index.html">BACK</a>
+    </BUtton>
+
+    <script>
+        let currentDisplay = '0';
+        const display = document.getElementById('display');
+        
+        function updateDisplay() {
+            display.textContent = currentDisplay;
+        }
+        
+        function appendToDisplay(value) {
+            if (currentDisplay === '0' && value !== '.') {
+                currentDisplay = value;
+            } else {
+                currentDisplay += value;
+            }
+            updateDisplay();
+        }
+        
+        function clearDisplay() {
+            currentDisplay = '0';
+            updateDisplay();
+        }
+        
+        function backspace() {
+            if (currentDisplay.length === 1) {
+                currentDisplay = '0';
+            } else {
+                currentDisplay = currentDisplay.slice(0, -1);
+            }
+            updateDisplay();
+        }
+        
+        function calculate() {
+            try {
+                currentDisplay = eval(currentDisplay).toString();
+            } catch (error) {
+                currentDisplay = 'Error';
+            }
+            updateDisplay();
+        }
+        
+        // Keyboard support
+        document.addEventListener('keydown', function(event) {
+            if (event.key >= '0' && event.key <= '9') {
+                appendToDisplay(event.key);
+            } else if (event.key === '.') {
+                appendToDisplay('.');
+            } else if (event.key === '+' || event.key === '-' || event.key === '*' || event.key === '/') {
+                appendToDisplay(event.key);
+            } else if (event.key === 'Enter') {
+                calculate();
+            } else if (event.key === 'Escape') {
+                clearDisplay();
+            } else if (event.key === 'Backspace') {
+                backspace();
+            }
+        });
+    </script>
+</body>
+</html>
