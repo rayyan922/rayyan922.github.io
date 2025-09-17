@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GiggleBot 3000 - The Funny Chatbot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .chat-container {
+            width: 100%;
+            max-width: 500px;
+            background-color: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .chat-header {
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .chat-header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .chat-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .chat-messages {
+            height: 400px;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            margin-bottom: 15px;
+            border-radius: 18px;
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .bot-message {
+            background-color: #e5e5ea;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .user-message {
+            background-color: #007aff;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            background-color: #fff;
+            border-top: 1px solid #eee;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+            font-size: 16px;
+        }
+        
+        .chat-input button {
+            margin-left: 10px;
+            padding: 12px 20px;
+            background-color: #ff7e5f;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .chat-input button:hover {
+            background-color: #ff6b4a;
+        }
+        
+        .typing-indicator {
+            display: none;
+            padding: 10px;
+            font-style: italic;
+            color: #888;
+        }
+        
+        .typing-indicator.active {
+            display: block;
+        }
+        
+        .joke-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #a777e3;
+            color: white;
+            border: none;
+            border-radius: 0 0 20px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        
+        .joke-button:hover {
+            background-color: #9165d6;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>GiggleBot 3000</h1>
+            <p>Your personal digital comedian</p>
+        </div>
+        
+        <div class="chat-messages" id="chat-messages">
+            <div class="message bot-message">
+                Hey there! I'm GiggleBot 3000, the funniest chatbot this side of the internet! 😄 Want to hear a joke?
+            </div>
+        </div>
+        
+        <div class="typing-indicator" id="typing-indicator">
+            GiggleBot is typing...
+        </div>
+        
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type your message here..." autocomplete="off">
+            <button id="send-button">Send</button>
+        </div>
+        
+        <button class="joke-button" id="joke-button">Tell me a random joke!</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-input');
+            const sendButton = document.getElementById('send-button');
+            const jokeButton = document.getElementById('joke-button');
+            const typingIndicator = document.getElementById('typing-indicator');
+            
+            // Jokes database
+            const jokes = [
+                "Why don't scientists trust atoms? Because they make up everything!",
+                "Why did the scarecrow win an award? Because he was outstanding in his field!",
+                "What do you call a fake noodle? An impasta!",
+                "Why couldn't the bicycle stand up by itself? It was two tired!",
+                "What do you call a bear with no teeth? A gummy bear!",
+                "Why don't eggs tell jokes? They'd crack each other up!",
+                "What do you call a sleeping bull? A bulldozer!",
+                "How does a penguin build its house? Igloos it together!",
+                "Why did the math book look so sad? Because it had too many problems!",
+                "What's orange and sounds like a parrot? A carrot!",
+                "Why did the coffee file a police report? It got mugged!",
+                "What did one ocean say to the other ocean? Nothing, they just waved!",
+                "Why don't skeletons fight each other? They don't have the guts!",
+                "What do you call a dinosaur that crashes his car? Tyrannosaurus Wrecks!",
+                "Why did the picture go to jail? Because it was framed!"
+            ];
+            
+            // Funny responses
+            const funnyResponses = [
+                "I'm not saying I'm a superhero, but have you ever seen me and Batman in the same room?",
+                "If I had a dollar for every time someone asked me that, I'd be using a better chatbot!",
+                "I'd tell you a joke about UDP, but you might not get it.",
+                "I'm not lazy, I'm in energy-saving mode!",
+                "Why don't you ask me something important, like what's the airspeed velocity of an unladen swallow?",
+                "I'm not arguing, I'm just explaining why I'm right!",
+                "I was going to tell you a time-traveling joke, but you didn't like it.",
+                "I'm not short, I'm concentrated awesome!",
+                "I'm not procrastinating, I'm just doing side quests!",
+                "I'm on a seafood diet. I see food, and I eat it!"
+            ];
+            
+            // Add message to chat
+            function addMessage(message, isUser) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+                messageDiv.textContent = message;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Show typing indicator
+            function showTyping() {
+                typingIndicator.classList.add('active');
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Hide typing indicator
+            function hideTyping() {
+                typingIndicator.classList.remove('active');
+            }
+            
+            // Get random response
+            function getRandomResponse() {
+                return funnyResponses[Math.floor(Math.random() * funnyResponses.length)];
+            }
+            
+            // Get random joke
+            function getRandomJoke() {
+                return jokes[Math.floor(Math.random() * jokes.length)];
+            }
+            
+            // Process user message
+            function processMessage(message) {
+                showTyping();
+                
+                setTimeout(() => {
+                    hideTyping();
+                    
+                    const lowerMessage = message.toLowerCase();
+                    
+                    if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+                        addMessage("Hey there! How's it going? Want to hear a terrible joke?", false);
+                    } 
+                    else if (lowerMessage.includes('how are you')) {
+                        addMessage("I'm running on 100% caffeine and questionable life choices! How about you?", false);
+                    }
+                    else if (lowerMessage.includes('joke') || lowerMessage.includes('funny')) {
+                        addMessage(getRandomJoke(), false);
+                    }
+                    else if (lowerMessage.includes('thank')) {
+                        addMessage("You're welcome! I'm here all week. Try the veal!", false);
+                    }
+                    else if (lowerMessage.includes('bye') || lowerMessage.includes('goodbye')) {
+                        addMessage("Alright, I'm outta here! But if you need more laughs, you know where to find me! 😄", false);
+                    }
+                    else {
+                        addMessage(getRandomResponse(), false);
+                    }
+                }, 1000 + Math.random() * 1000); // Random delay to simulate thinking
+            }
+            
+            // Send message
+            function sendMessage() {
+                const message = userInput.value.trim();
+                if (message) {
+                    addMessage(message, true);
+                    userInput.value = '';
+                    processMessage(message);
+                }
+            }
+            
+            // Event listeners
+            sendButton.addEventListener('click', sendMessage);
+            
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            jokeButton.addEventListener('click', function() {
+                showTyping();
+                
+                setTimeout(() => {
+                    hideTyping();
+                    addMessage(getRandomJoke(), false);
+                }, 1000);
+            });
+            
+            // Focus input field
+            userInput.focus();
+        });
+    </script>
+</body>
+</html>
